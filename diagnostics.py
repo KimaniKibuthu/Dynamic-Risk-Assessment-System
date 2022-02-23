@@ -10,8 +10,8 @@ import ingestion
 import subprocess
 from itertools import chain
 
-##################Load config.json and get environment variables
-with open('config.json','r') as f:
+# Load config.json and get environment variables
+with open('config.json', 'r') as f:
     config = json.load(f) 
 
 production_path = os.path.join(config['prod_deployment_path']) 
@@ -23,9 +23,10 @@ model_path = os.path.join(base_path, production_path, 'trainedmodel.pkl')
 test_data_complete_path = os.path.join(base_path, test_data_path, 'testdata.csv')
 final_data_path = os.path.join(base_path, ingested_data_path, 'finaldata.csv')
 
-##################Function to get model predictions
+
+# Function to get model predictions
 def model_predictions():
-    #read the deployed model and a test dataset, calculate predictions
+    # read the deployed model and a test dataset, calculate predictions
     with open(model_path, 'rb') as model_input:
         model = pickle.load(model_input)
     test_data = pd.read_csv(test_data_complete_path)
@@ -39,14 +40,16 @@ def model_predictions():
     assert len(predictions) == len(X)
     return predictions
 
+
 def missing_data_checker():
     data = pd.read_csv(final_data_path)
     percentage_of_missing = [data[column].isnull().sum()/len(data) for column in data]
     return percentage_of_missing
 
-##################Function to get summary statistics
+
+# Function to get summary statistics
 def dataframe_summary():
-    #calculate summary statistics here
+    # calculate summary statistics here
     data = pd.read_csv(final_data_path)
     average = list(data.mean())
     medians = list(data.median())
@@ -55,9 +58,10 @@ def dataframe_summary():
 
     return summary
 
-##################Function to get timings
+
+# Function to get timings
 def execution_time():
-    #calculate timing of training.py and ingestion.py
+    # calculate timing of training.py and ingestion.py
     ingestion_start = timeit.default_timer()
     ingestion
     ingestion_end = timeit.default_timer()
@@ -69,9 +73,10 @@ def execution_time():
     training_timing = training_end - training_start
     return [ingestion_timing, training_timing]
 
-##################Function to check dependencies
+
+# Function to check dependencies
 def outdated_packages_list():
-    #get a list of outdated packages
+    # get a list of outdated packages
     outdated = subprocess.check_output(['pip', 'list', '--outdated'])
     with open('outdated.txt', 'wb') as f:
         f.write(outdated)

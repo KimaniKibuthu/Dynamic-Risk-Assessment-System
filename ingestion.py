@@ -4,35 +4,34 @@ import os
 import json
 from datetime import datetime
 
-
-
-
-#############Load config.json and get input and output paths
-with open('config.json','r') as f:
-    config = json.load(f) 
+# Load config.json and get input and output paths
+with open('config.json', 'r') as f:
+    config = json.load(f)
 
 input_folder_path = config['input_folder_path']
 output_folder_path = config['output_folder_path']
+
+base_path = os.getcwd()
+full_input_folder_path = os.path.join(base_path, input_folder_path)
+full_output_folder_path = os.path.join(base_path, output_folder_path)
+final_data_path = os.path.join(full_output_folder_path, 'finaldata.csv')
+final_files_path = os.path.join(full_output_folder_path, 'ingestedfiles.txt')
+
+if not os.path.exists(full_output_folder_path):
+    os.makedirs(full_output_folder_path)
+
 
 def text_saver(filepath, values):
     with open(filepath, 'w') as output:
         output.write(str(values))
 
-#############Function for data ingestion
+
+# Function for data ingestion
 def merge_multiple_dataframe():
-    ## Check for datasets
+    # Check for datasets
     # Specify directories and create output directory
-    base_path = os.getcwd()
-    full_input_folder_path = os.path.join(base_path, input_folder_path)
-    full_output_folder_path = os.path.join(base_path, output_folder_path)
-    final_data_path = os.path.join(full_output_folder_path, 'finaldata.csv') 
-    final_files_path =  os.path.join(full_output_folder_path, 'ingestedfiles.txt')  
-    if not os.path.exists(full_output_folder_path):
-        os.makedirs(full_output_folder_path)
-    
-    # Read files & Merge
     files = os.listdir(full_input_folder_path)
-    if files == None:
+    if files is None:
         print('No files found')
     else:
         final_data = pd.DataFrame()

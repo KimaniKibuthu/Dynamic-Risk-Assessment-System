@@ -10,22 +10,19 @@ import json
 import os
 
 
-
-###############Load config.json and get path variables
-with open('config.json','r') as f:
+# Load config.json and get path variables
+with open('config.json', 'r') as f:
     config = json.load(f) 
 
 base_path = os.getcwd()
 test_data_path = os.path.join(base_path, config['test_data_path'], 'testdata.csv')
-model_path =  os.path.join(base_path, config['prod_deployment_path'], 'trainedmodel.pkl')
+model_path = os.path.join(base_path, config['prod_deployment_path'], 'trainedmodel.pkl')
 
 
-
-
-##############Function for reporting
+# Function for reporting
 def score_model():
-    #calculate a confusion matrix using the test data and the deployed model
-    #write the confusion matrix to the workspace
+    # calculate a confusion matrix using the test data and the deployed model
+    # write the confusion matrix to the workspace
     with open(model_path, 'rb') as model_input:
         model = pickle.load(model_input)
     test_data = pd.read_csv(test_data_path)

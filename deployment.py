@@ -10,9 +10,8 @@ from sklearn.linear_model import LogisticRegression
 import json
 
 
-
-##################Load config.json and correct path variable
-with open('config.json','r') as f:
+# Load config.json and correct path variable
+with open('config.json', 'r') as f:
     config = json.load(f) 
 
 output_data_path = os.path.join(config['output_folder_path']) 
@@ -27,14 +26,15 @@ deployment_folder_path = os.path.join(base_path, prod_deployment_path)
 
 if not os.path.exists(deployment_folder_path):
     os.makedirs(deployment_folder_path)
-# Create files in deployment folder
 
-####################function for deployment
+
+# function for deployment
 def store_model_into_pickle():
   
     shutil.copy(trained_model_path, os.path.join(deployment_folder_path, 'trainedmodel.pkl'))
     shutil.copy(scores_path, os.path.join(deployment_folder_path, 'latestscores.txt'))
     shutil.copy(ingested_files_path, os.path.join(deployment_folder_path, 'ingestedfiles.txt'))
+
 
 if __name__ == '__main__':
     store_model_into_pickle()  
